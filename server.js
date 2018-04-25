@@ -15,7 +15,7 @@ app.use((req, res, next) => {
     
     console.log(log);
     fs.appendFile('server.log', log + '\n', (err) => {
-        console.log('Unable to append to server .log');
+        console.log(`Unable to append to server.log: ${err}`);
     });
     next();
 });
@@ -26,7 +26,6 @@ app.use((req, res, next) => {
 
 // NOTE: must be after the maintenance redirect - these are set up in order
 app.use(express.static(__dirname + '/public'));
-
 
 hbs.registerHelper('getCurrentYear', () => {
     return new Date().getFullYear();
@@ -55,6 +54,12 @@ app.get('/', (req, res) => {
         message: 'This is the home page. Cool eh?',
     });
 });
+
+app.get('/projects', (req, res) => {
+    res.render('projects.hbs', {
+        pageTitle: 'Projects',
+    });
+})
 
 app.get('/about', (req, res) => {
     res.render('about.hbs', {
